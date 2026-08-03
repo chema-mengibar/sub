@@ -1,0 +1,33 @@
+.timeline-toolbar {
+  align-items: end;
+}
+
+.timeline-toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #aeb4bf;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.timeline-toolbar input {
+  width: 150px;
+  min-height: 38px;
+  border: 1px solid #3a3d43;
+  border-radius: 6px;
+  background: #181b20;
+  color: #f1f3f7;
+  padding: 0 10px;
+
+  @media (max-width: 820px) {
+    width: min(150px, 42vw);
+  }
+}
+
+.timeline-separator {
+  width: 1px;
+  height: 38px;
+  background: #343841;
+  margin:0 20px
+}
