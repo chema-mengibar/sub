@@ -6,6 +6,7 @@ import { formatTime, parseFlexibleTime } from './js/time.js';
 import { createWaveform } from './js/waveform.js';
 
 const app = document.querySelector('#app');
+const MAX_TRANSCRIPT_FILE_SIZE = 10 * 1024 * 1024;
 
 app.innerHTML = `
   <main class="shell">
@@ -350,6 +351,12 @@ async function loadTranscriptText(name, text) {
   setStatus(`Loaded transcript: ${name}`);
 }
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+
 selectors.loadMediaBtn.addEventListener('click', () => selectors.mediaInput.click());
 selectors.loadTranscriptBtn.addEventListener('click', () => selectors.transcriptInput.click());
 
@@ -372,6 +379,11 @@ selectors.mediaInput.addEventListener('change', () => {
 selectors.transcriptInput.addEventListener('change', async () => {
   const file = selectors.transcriptInput.files?.[0];
   if (!file) return;
+  if (file.size > MAX_TRANSCRIPT_FILE_SIZE) {
+    setStatus('Transcript is too large to load safely in this browser.');
+    selectors.transcriptInput.value = '';
+    return;
+  }
   await loadTranscriptText(file.name, await file.text());
 });
 

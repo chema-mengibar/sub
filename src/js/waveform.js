@@ -1,4 +1,5 @@
 export function createWaveform({ selectors, getPlayer, clearPlaybackTargets }) {
+  const MAX_WAVEFORM_FILE_SIZE = 80 * 1024 * 1024;
   let waveformPeaks = [];
   let waveformReady = false;
   let userWaveScrolling = false;
@@ -111,6 +112,7 @@ export function createWaveform({ selectors, getPlayer, clearPlaybackTargets }) {
     const player = getPlayer();
     reset();
     if (!file || player !== selectors.audio) return;
+    if (file.size > MAX_WAVEFORM_FILE_SIZE) return;
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       const context = new AudioContextClass();
